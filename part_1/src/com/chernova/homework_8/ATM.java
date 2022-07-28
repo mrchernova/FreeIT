@@ -19,60 +19,157 @@ import java.util.Scanner;
  */
 
 public class ATM {
+
     public static Scanner sc = new Scanner(System.in);
+    public static StringBuffer currency = new StringBuffer();
 
     public static void main(String[] args) {
-        //Money byn = new Money(1, 2, 5);
-        Money byn = new Money(1, 0, 0);
-        System.out.println(byn);
+        Money byn = new Money(1, 2, 3);
+
         int total = byn.cash100 * 100 + byn.cash50 * 50 + byn.cash20 * 20;
-        System.out.println(total + " BYN");
+        System.out.println("Deposit money: " + total + " BYN");
 
-        System.out.println("Do you want to withdraw money from an ATM or deposit cash in an ATM?");
-        System.out.println("enter 'w' or 'd'");
+        int m = 0;  // сумма для снятия или пополнения
+        boolean solution = true; // операция возможна или нет
 
+        System.out.println("Do you want to withdraw from an ATM or deposit cash in an ATM?");
+        System.out.println("w/d ?");
         String s = sc.nextLine();
 
         switch (s) {
             case "w":
-                withdraw(byn, total);
+                System.out.println("ATM:\n" + byn);
+                System.out.println("How much do you want to withdraw?");
+                m = sc.nextInt();
+                if (m <= total) {
+                    int drop = 0;
+                    withdraw(m, byn, drop, solution);
+                } else {
+                    System.out.println("Insufficient funds");
+                }
                 break;
+
             case "d":
-                deposit();
+                System.out.println("Deposit money: " + total + " BYN");
+                System.out.println("How much do you want to deposit?");
+                m = sc.nextInt();
+                deposit(m, total, solution);
                 break;
             default:
-                System.out.println("I don't understand what do you want");
+                System.out.println("Error");
+        }
+    }
+
+
+    public static void deposit(int m, int total, boolean solution) {
+        // предроложим, что положить на счет можно только купюрами указанного номинала
+        // но какими именно мы не знаем
+        if ((m == 10) | (m == 30) | (m % 10 > 0)) {
+            solution = false;
+            System.out.println(solution);
+            System.out.println("You cannot deposit such sum");
+        } else {
+            System.out.println(solution);
+            total += m;
+            System.out.println("Deposit money: " + total + " BYN");
+        }
+    }
+
+
+    public static void withdraw(int m, Money byn, int drop, boolean solution) {
+        int cash100 = byn.cash100;
+        int cash50 = byn.cash50;
+        int cash20 = byn.cash20;
+        int mCopy = m; // так как 'm' в процессе будет изменятся, то делаем ее копию
+        solution = true;
+
+        if ((m < 20) | (m == 30) | (m % 10 > 0)) {
+            solution = false;   // решений нет
         }
 
+        // проходим по всем купюрам от большей к меньшей
+        // если решения не будет найдено, отнимаем по одной купюре от 100 до 50 и повторяем решение
+        if (cash100 - drop > 0) {
+            while ((m >= 100) && (cash100 - drop > 0)) {
+                cash100 = cash100 - drop;
+                m -= 100;
+                cash100--;
+                currency.append(100 + " ");
+            }
+            while ((m >= 50) && (cash50 > 0)) {
+                m -= 50;
+                cash50--;
+                currency.append(50 + " ");
+            }
+            while ((m >= 20) && (cash20 > 0)) {
+                m -= 20;
+                cash20--;
+                currency.append(20 + " ");
+            }
 
-    }
+        } else if (cash50 - (drop - cash100) > 0) {
+            while ((m >= 50) && (cash50 - (cash100 - drop) > 0)) {
+                cash50 = cash50 - drop;
+                m -= 50;
+                cash50--;
+                currency.append(50 + " ");
+            }
+            while ((m >= 20) && (cash20 > 0)) {
+                m -= 20;
+                cash20--;
+                currency.append(20 + " ");
+            }
 
-    public static void moneyInATM(int total, int m) {
-        System.out.println("Money in ATM: " + (total + m) + " BYN");
-    }
-
-
-
-    public static void withdraw(Money byn, int total) {
-        System.out.println("How much do you want to withdraw?");
-        int m = sc.nextInt();
-        // надо ж проверить или можно снять такую сумму
-        // хз как
-        if ((m <= total) && (m % 20 == 0 || m % 50 == 0 || m % 70 == 0)) {
-            System.out.println("можно снять");
-            System.out.println("Ok. Here your money: " + m);
-            moneyInATM(total, -m);
+        } else if (cash20 * 20 >= m) {
+            while ((m >= 20) && (cash20 > 0)) {
+                m -= 20;
+                cash20--;
+                currency.append(20 + " ");
+            }
+            // закончен перебор всех вариантов по порядку
+            // если решений не найдено, то
+            // повторить цикл уменьшая только количество купюр по 50
+        } else if (cash50 - (drop - (byn.cash50 + byn.cash100)) > 0) { // имеет смысл делать проверку, если были купюры с номиналом 50
+            while ((m >= 100) && (cash100 > 0)) {
+                m -= 100;
+                cash100--;
+                currency.append(100 + " ");
+            }
+            while ((m >= 50) && (cash50 > 0)) {
+                cash50 -= drop - (byn.cash50 + byn.cash100);
+                m -= 50;
+                cash50--;
+                currency.append(50 + " ");
+                }
+            while ((m >= 20) && (cash20 > 0)) {
+                m -= 20;
+                cash20--;
+                currency.append(20 + " ");
+            }
         }else{
-            System.out.println("нельзя снять");
+            // если ни один из вариантов не подошел
+            solution = false; //решений нет
+        }
+
+        // если после всех действий m = 0, значит найдена подходящая комбинация купюр
+        if (m == 0) {
+            System.out.println(solution);
+            System.out.println("nominals: " + currency);
+
+        } else {
+            // если еще есть варианты, то повторить
+            if (solution) {
+                currency.delete(0, currency.length());
+                drop++;
+                withdraw(mCopy, byn, drop, solution);
+            } else {
+                System.out.println(solution);
+            }
         }
 
 
-
     }
 
-    public static void deposit() {
-        System.out.println("deposite");
-    }
 
     private static class Money {
         private int cash100;
@@ -87,11 +184,9 @@ public class ATM {
 
         @Override
         public String toString() {
-            return "Money{" +
-                    "cash100=" + cash100 +
-                    ", cash50=" + cash50 +
-                    ", cash20=" + cash20 +
-                    '}';
+            return "100 BYN * " + cash100 +
+                    "\n50 BYN * " + cash50 +
+                    "\n20 BYN * " + cash20;
         }
     }
 }
