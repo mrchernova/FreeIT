@@ -129,18 +129,23 @@ public class ATM {
             // закончен перебор всех вариантов по порядку
             // если решений не найдено, то
             // повторить цикл уменьшая только количество купюр по 50
-        } else if (cash50 - (drop - (byn.cash50 + byn.cash100)) > 0) { // имеет смысл делать проверку, если были купюры с номиналом 50
+        }
+        else if (cash50 - (drop - (byn.cash50 + byn.cash100)) >= 0) { // имеет смысл делать проверку, если были купюры с номиналом 50
             while ((m >= 100) && (cash100 > 0)) {
                 m -= 100;
                 cash100--;
                 currency.append(100 + " ");
             }
-            while ((m >= 50) && (cash50 > 0)) {
-                cash50 -= drop - (byn.cash50 + byn.cash100);
-                m -= 50;
-                cash50--;
-                currency.append(50 + " ");
+
+            if(cash50 - (drop - (byn.cash50 + byn.cash100)) > 0) {
+                while ((m >= 50) && (cash50 > 0)) {
+                    cash50 -= drop - (byn.cash50 + byn.cash100);
+                    m -= 50;
+                    cash50--;
+                    currency.append(50 + " ");
                 }
+            }
+
             while ((m >= 20) && (cash20 > 0)) {
                 m -= 20;
                 cash20--;

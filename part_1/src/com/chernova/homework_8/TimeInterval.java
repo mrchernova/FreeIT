@@ -1,7 +1,5 @@
 package com.chernova.homework_8;
 
-import java.util.ArrayList;
-
 /**
  * Создать класс и объекты описывающие промежуток времени.
  * Сам промежуток в классе должен задаваться тремя свойствами: секундами, минутами, часами.
@@ -13,45 +11,43 @@ import java.util.ArrayList;
 
 public class TimeInterval {
     public static void main(String[] args) {
-        ArrayList<Time> t = new ArrayList<>();
-        ArrayList<Integer> sec = new ArrayList<>();
 
-        Time a = new Time(120);
-        Time b = new Time(1, 30, 5);
+        Time time_1 = new Time(120);
+        Time time_2 = new Time(1, 30, 5);
 
-        correctDate(a);
-        System.out.println("time a:    " + a);
-        correctDate(b);
-        System.out.println("time b:    " + b);
+        correctDate(time_1);
+        System.out.println("time a:    " + time_1);
+        correctDate(time_2);
+        System.out.println("time b:    " + time_2);
 
-        secondsOnly(a);
-        System.out.println("\nseconds a: " + a);
-        secondsOnly(b);
-        System.out.println("seconds b: " + b);
+        intoSeconds(time_1);
+        System.out.println("\nseconds a: " + time_1);
+        intoSeconds(time_2);
+        System.out.println("seconds b: " + time_2);
 
-        Time c = new Time(Math.abs(a.compareTo(b)));
-        correctDate(c);
-        System.out.println("\nTime intervel between a and b = " + c);
+        Time result = new Time(Math.abs(time_1.compareTo(time_2)));
+        correctDate(result);
+        System.out.println("\nTime interval between a and b = " + result);
 
 
     }
 
     // перевод каких бы то ни было введенных данных в нормальное представление часов, минут, секунд
-    public static Time correctDate(Time t) {
-        int seconds = t.seconds;
-        t.seconds = seconds % 60;
-        int minutes = ((seconds - t.seconds) / 60) + t.minutes;
-        t.minutes = minutes % 60;
-        t.hours = ((minutes - t.minutes) / 60) + t.hours;
-        return t;
+    public static Time correctDate(Time time) {
+        int seconds = time.seconds;
+        time.seconds = seconds % 60;
+        int minutes = ((seconds - time.seconds) / 60) + time.minutes;
+        time.minutes = minutes % 60;
+        time.hours = ((minutes - time.minutes) / 60) + time.hours;
+        return time;
     }
 
     // метод для получения полного количества секунд в объекте
-    public static int secondsOnly(Time t) {
-        t.seconds = (t.seconds + t.minutes * 60 + t.hours * 3600);
-        t.hours = 0;
-        t.minutes = 0;
-        return t.seconds;
+    public static int intoSeconds(Time time) {
+        time.seconds = (time.seconds + time.minutes * 60 + time.hours * 3600);
+        time.hours = 0;
+        time.minutes = 0;
+        return time.seconds;
     }
 
 
@@ -80,8 +76,8 @@ public class TimeInterval {
         }
 
         @Override
-        public int compareTo(Time t) {
-            return this.seconds - t.seconds;
+        public int compareTo(Time time) {
+            return this.seconds - time.seconds;
         }
     }
 }
