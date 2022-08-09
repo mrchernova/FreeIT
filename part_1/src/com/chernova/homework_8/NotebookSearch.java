@@ -25,40 +25,42 @@ public class NotebookSearch {
         notes.add(new Note("Задача", "Придумать как оптимизировать работу"));
         notes.add(new Note("Задача2", "Выпить кофе"));
 
-        System.out.println("Список дел:");
-        printNote(notes);
+        System.out.print("Список дел:");
+        System.out.println(printNote(notes).toString().replaceAll("^\\[|,|\\]$", ""));
 
         System.out.println("\nВведите слово для поиска:");
         search = sc.nextLine();
 
-        searchNote(notes, search);
+        System.out.println(searchNote(notes, search).toString().replaceAll("^\\[|,|\\]$", ""));
         sc.close();
     }
 
 
-    public static void printNote(ArrayList<Note> notes) {
+    public static ArrayList<Note> printNote(ArrayList<Note> notes) {
+        ArrayList<Note> list = new ArrayList<>();
         for (int i = 0; i < notes.size(); i++) {
-            System.out.println(notes.get(i));
+            list.add(notes.get(i));
         }
+        return list;
     }
 
 
-    public static void searchNote(ArrayList<Note> notes, String search) {
-        boolean isMatch = false;
+    public static ArrayList<Note> searchNote(ArrayList<Note> notes, String search) {
+        ArrayList<Note> list = new ArrayList<>();
 
         if (!search.equals("")) {
             for (int i = 0; i < notes.size(); i++) {
 
                 if (notes.get(i).note.contains(search)) {
-                    System.out.println(notes.get(i));
-                    isMatch = true;
+                    list.add(notes.get(i));
                 }
             }
         }
 
-        if (!isMatch || search.equals("")) {
+        if (list.isEmpty()) {
             System.out.println("Совпадений не найдено");
         }
+        return list;
     }
 
     public static class Note {
@@ -72,7 +74,7 @@ public class NotebookSearch {
 
         @Override
         public String toString() {
-            return "[" + title + "] >> " + note;
+            return "\n[" + title + "] >> " + note;
         }
     }
 }

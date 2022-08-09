@@ -29,6 +29,8 @@ public class ATM {
         int total = byn.cash100 * 100 + byn.cash50 * 50 + byn.cash20 * 20;
         System.out.println("Deposit money: " + total + " BYN");
 
+        System.out.println(byn);
+
         int m = 0;  // сумма для снятия или пополнения
         boolean solution = true; // операция возможна или нет
 
@@ -38,7 +40,6 @@ public class ATM {
 
         switch (s) {
             case "w":
-                System.out.println("ATM:\n" + byn);
                 System.out.println("How much do you want to withdraw?");
                 m = sc.nextInt();
                 if (m <= total) {
@@ -53,25 +54,39 @@ public class ATM {
                 System.out.println("Deposit money: " + total + " BYN");
                 System.out.println("How much do you want to deposit?");
                 m = sc.nextInt();
-                deposit(m, total, solution);
+                deposit(Math.abs(m), total, byn);
                 break;
             default:
-                System.out.println("Error");
+                System.out.println("Impossible option. Process finished");
         }
     }
 
 
-    public static void deposit(int m, int total, boolean solution) {
-        // предроложим, что положить на счет можно только купюрами указанного номинала
-        // но какими именно мы не знаем
+    public static void deposit(int m, int total, Money byn) {
+
         if ((m == 10) | (m == 30) | (m % 10 > 0)) {
-            solution = false;
-            System.out.println(solution);
-            System.out.println("You cannot deposit such sum");
+            System.out.println("You cannot deposit such sum. Process finished");
         } else {
-            System.out.println(solution);
-            total += m;
-            System.out.println("Deposit money: " + total + " BYN");
+
+            System.out.println("Количество купюр номиналом 100  BYN");
+            int cash100 = Math.abs(sc.nextInt());
+            System.out.println("Количество купюр номиналом 50  BYN");
+            int cash50 = Math.abs(sc.nextInt());
+            System.out.println("Количество купюр номиналом 20  BYN");
+            int cash20 = Math.abs(sc.nextInt());
+
+            if (m == (cash100 * 100 + cash50 * 50 + cash20 * 20)) {
+                byn.cash100 += cash100;
+                byn.cash50 += cash50;
+                byn.cash20 += cash20;
+
+                total += m;
+                System.out.println("Deposit money: " + total + " BYN");
+                System.out.println(byn);
+
+            } else {
+                System.out.println("Unable to perform operation. Process finished");
+            }
         }
     }
 
@@ -127,17 +142,15 @@ public class ATM {
                 currency.append(20 + " ");
             }
             // закончен перебор всех вариантов по порядку
-            // если решений не найдено, то
-            // повторить цикл уменьшая только количество купюр по 50
-        }
-        else if (cash50 - (drop - (byn.cash50 + byn.cash100)) >= 0) { // имеет смысл делать проверку, если были купюры с номиналом 50
+            // если решений не найдено, то повторить цикл уменьшая только количество купюр по 50
+        } else if (cash50 - (drop - (byn.cash50 + byn.cash100)) >= 0) { // имеет смысл делать проверку, если были купюры с номиналом 50
             while ((m >= 100) && (cash100 > 0)) {
                 m -= 100;
                 cash100--;
                 currency.append(100 + " ");
             }
 
-            if(cash50 - (drop - (byn.cash50 + byn.cash100)) > 0) {
+            if (cash50 - (drop - (byn.cash50 + byn.cash100)) > 0) {
                 while ((m >= 50) && (cash50 > 0)) {
                     cash50 -= drop - (byn.cash50 + byn.cash100);
                     m -= 50;
@@ -151,15 +164,20 @@ public class ATM {
                 cash20--;
                 currency.append(20 + " ");
             }
-        }else{
+        } else {
             // если ни один из вариантов не подошел
             solution = false; //решений нет
         }
 
         // если после всех действий m = 0, значит найдена подходящая комбинация купюр
         if (m == 0) {
-            System.out.println(solution);
             System.out.println("nominals: " + currency);
+
+            // обновляем количество купюр в банкомате
+            byn.cash100 = cash100;
+            byn.cash50 = cash50;
+            byn.cash20 = cash20;
+            System.out.println(byn);
 
         } else {
             // если еще есть варианты, то повторить
@@ -168,7 +186,7 @@ public class ATM {
                 drop++;
                 withdraw(mCopy, byn, drop, solution);
             } else {
-                System.out.println(solution);
+                System.out.println("You cannot withdraw such sum. Process finished");
             }
         }
 
