@@ -27,8 +27,8 @@ public class Main {
 
         Library.list.add(new Book(1, "Убийство в \"Восточном экспрессе\"", "Детектив"));
         Library.list.add(new Book(2, "Мастер и Маргарита", "Роман"));
-        Library.list.add(new Book(3, "A-Z", "test"));
-        Library.list.add(new Book(4, "Z-A", "test"));
+        Library.list.add(new Book(3, "Рыжий Орм", "Роман"));
+        Library.list.add(new Book(4, "Пикник на обочине", "Фантастика"));
 
 
         int option = -1;
