@@ -36,9 +36,9 @@ public class ATM {
 
         System.out.println("Do you want to withdraw from an ATM or deposit cash in an ATM?");
         System.out.println("w/d ?");
-        String s = sc.nextLine();
+        String option = sc.nextLine();
 
-        switch (s) {
+        switch (option) {
             case "w":
                 System.out.println("How much do you want to withdraw?");
                 m = sc.nextInt();

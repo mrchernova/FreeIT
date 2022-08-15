@@ -26,7 +26,7 @@ public class NotebookSearch {
         notes.add(new Note("Задача2", "Выпить кофе"));
 
         System.out.print("Список дел:");
-        System.out.println(printNote(notes).toString().replaceAll("^\\[|,|\\]$", ""));
+        System.out.println(notes.toString().replaceAll("^\\[|,|\\]$", ""));
 
         System.out.println("\nВведите слово для поиска:");
         search = sc.nextLine();
@@ -36,19 +36,10 @@ public class NotebookSearch {
     }
 
 
-    public static ArrayList<Note> printNote(ArrayList<Note> notes) {
-        ArrayList<Note> list = new ArrayList<>();
-        for (int i = 0; i < notes.size(); i++) {
-            list.add(notes.get(i));
-        }
-        return list;
-    }
-
-
     public static ArrayList<Note> searchNote(ArrayList<Note> notes, String search) {
         ArrayList<Note> list = new ArrayList<>();
 
-        if (!search.equals("")) {
+        if (!search.isEmpty()) {
             for (int i = 0; i < notes.size(); i++) {
 
                 if (notes.get(i).note.contains(search)) {
