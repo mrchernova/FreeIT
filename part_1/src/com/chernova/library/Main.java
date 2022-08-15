@@ -100,11 +100,12 @@ public class Main {
                             readyToSet = false;
                             sc.next();
                         }
-
                     }
                     newBook.setId(idAdd);
                     System.out.print("название  книги: ");
-                    newBook.setTitle(sc.next());
+                    sc.nextLine();
+                    newBook.setTitle(sc.nextLine());
+
                     System.out.println("жанр  книги:");
                     System.out.print(ANSI_YELLOW);
                     Genre.printGenre();
