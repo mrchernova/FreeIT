@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<students>
+    <student login="id1" faculty="PSF">
+        <name>Raman</name>
+        <phone>375296600963</phone>
+        <phone>375296060606</phone>
+        <address>
+            <country>Belarus</country>
+            <city>Minsk</city>
+            <street>Shorsa</street>
+        </address>
+    </student>
+
+    <student login="id2" faculty="PSF">
+        <name>Raman</name>
+        <phone>375296600963</phone>
+        <phone>375296060606</phone>
+        <address>
+            <country>Belarus</country>
+            <city>Minsk</city>
+            <street>Shorsa</street>
+        </address>
+    </student>
+</students>

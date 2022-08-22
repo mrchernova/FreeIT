@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+targetNamespace="http://www.example.com/students" xmlns:tns="http://www.example.com/students">
+
+    <element name="students">
+        <complexType>
+            <sequence>
+                <element name="student"
+                         type="tns:Student"
+                         minOccurs="2"
+                         maxOccurs="unbounded"/>
+<!--                <element name="university" type="tns:Address" minOccurs="1" maxOccurs="1"/>-->
+            </sequence>
+        </complexType>
+    </element>
+
+
+
+
+    <complexType name="Student">
+        <sequence>
+            <element name="name" type="string"/>
+            <element name="telephone" type="decimal"/>
+            <element name="address" type="tns:Address"/>
+        </sequence>
+        <attribute name="login" type="tns:Login" use="required"/>
+        <attribute name="faculty" type="string" use="required"/>
+    </complexType>
+
+    <simpleType name="Login">
+        <restriction base="ID">
+            <pattern value="[a-zA-Z]{3}[a-zA-Z0-9_]+"/>
+        </restriction>
+    </simpleType>
+
+    <complexType name="Address">
+        <sequence>
+            <element name="country" type="string"/>
+            <element name="city" type="string"/>
+            <element name="street" type="string"/>
+        </sequence>
+    </complexType>
+
+</schema>

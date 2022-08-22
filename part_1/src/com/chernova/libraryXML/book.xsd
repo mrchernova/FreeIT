@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema">
+    <element name="books">
+        <complexType>
+            <sequence>
+
+                <element name="book" maxOccurs="unbounded">
+
+                    <complexType>
+                        <sequence>
+                            <element name="title">
+                                <simpleType>
+                                    <restriction base="string">
+                                        <maxLength value="50"/>
+                                    </restriction>
+                                </simpleType>
+                            </element>
+
+                            <element name="text">
+                                <simpleType>
+                                    <restriction base="string">
+                                        <maxLength value="255"/>
+                                    </restriction>
+                                </simpleType>
+                            </element>
+
+                            <element name="genre">
+                                <simpleType>
+                                    <restriction base="string"/>
+                                </simpleType>
+                            </element>
+
+                            <element name="publishDate">
+                                <simpleType>
+                                    <restriction base="date"/>
+                                </simpleType>
+                            </element>
+                        </sequence>
+
+                        <attribute name="isbn">
+                            <simpleType>
+                                <restriction base="string">
+                                    <pattern value="[0-9]-[0-9]{4}-[0-9]{4}-[0-9]"/>
+                                </restriction>
+
+                            </simpleType>
+                        </attribute>
+
+
+                    </complexType>
+
+
+                </element>
+
+
+            </sequence>
+        </complexType>
+
+    </element>
+</schema>
