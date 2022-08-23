@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class Library {
+
     public static LinkedList<Book> list = new LinkedList<>();
 
     public static final String ANSI_GREEN = "\u001B[32m";
@@ -138,10 +139,7 @@ public class Library {
 
 
     public static void addNewBookXML(Document document) {
-
         for (int i = 0; i < list.size(); i++) {
-
-
             Book newBook = new Book();
             newBook.setTitle(list.get(i).getTitle());
             newBook.setText(list.get(i).getText());
@@ -168,13 +166,14 @@ public class Library {
             isbn.setTextContent(newBook.getISBN());
 
 
+            //Если передавать объект, то можно вызвать addBook                  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
             // Добавляем внутренние элементы книги в элемент <Book>
             book.appendChild(title);
             book.appendChild(text);
             book.appendChild(genre);
             book.appendChild(publishDate);
             book.setAttribute("isbn", newBook.getISBN());
-
 
             Node root = document.getDocumentElement();
             // Добавляем книгу в корневой элемент

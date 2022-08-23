@@ -1,6 +1,7 @@
 package com.chernova.libraryXML;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -40,8 +41,48 @@ public class Main {
             "\t3. По добавлению";
 
 
-    public static String FILE_PATH = "part_1/src/com/chernova/libraryXML/";
+    //public static String FILE_PATH = "part_1/src/com/chernova/libraryXML/";       // H
+    public static String FILE_PATH = "freeit/part_1/src/com/chernova/libraryXML/";  // W
 
+    private static void printInfoAboutAllChildNodes(NodeList nlist) {
+        Book bookFromXML = new Book();
+        for (int i = 0; i < nlist.getLength(); i++) {
+            Node node = nlist.item(i);
+
+
+            // У элементов есть два вида узлов - другие элементы или текстовая информация. Потому нужно разбираться две ситуации отдельно.
+            if (node.getNodeType() == Node.TEXT_NODE) {
+                // Фильтрация информации, так как пробелы и переносы строчек нам не нужны. Это не информация.
+                String textInformation = node.getNodeValue().replace("\n", "").trim();
+
+                if (!textInformation.isEmpty())
+                    System.out.println(node.getNodeValue());
+
+            }
+            // Если это не текст, а элемент, то обрабатываем его как элемент.
+            else {
+                System.out.println("<"+node.getNodeName()+">");
+
+                // Получение атрибутов
+                NamedNodeMap attributes = node.getAttributes();
+
+                // Вывод информации про все атрибуты
+                for (int k = 0; k < attributes.getLength(); k++) {
+                    System.out.println("Имя атрибута: " + attributes.item(k).getNodeName() + ": " + attributes.item(k).getNodeValue());
+                bookFromXML.setISBN(attributes.item(k).getNodeValue());
+                    System.out.println("---"+bookFromXML.getISBN());
+                }
+
+            }
+
+
+
+            // Если у данного элемента еще остались узлы, то вывести всю информацию про все его узлы.
+            if (node.hasChildNodes()) {
+                printInfoAboutAllChildNodes(node.getChildNodes());
+            }
+        }
+    }
 
     public static void main(String[] args) {
 
@@ -52,6 +93,34 @@ public class Main {
             System.out.println("Файл book.xml не соответствует схеме");
         }
 
+// попробовать добавить в list книги из xml                     !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(FILE_PATH + "book.xml");
+
+            String element = "books";
+            NodeList matchedElementsList = document.getElementsByTagName(element);
+            if (matchedElementsList.getLength() == 0) {
+                System.out.println("<" + element + "> не был найден в файле.");
+
+            } else {
+                // Получение первого элемента.
+                Node foundedElement = matchedElementsList.item(0);
+
+                // Если есть данные внутри, вызов метода для вывода всей информации
+                if (foundedElement.hasChildNodes())
+                    printInfoAboutAllChildNodes(foundedElement.getChildNodes());
+            }
+
+        } catch (ParserConfigurationException ex) {
+            ex.printStackTrace(System.out);
+        } catch (SAXException ex) {
+            ex.printStackTrace(System.out);
+        } catch (IOException ex) {
+            ex.printStackTrace(System.out);
+        }
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //        Library.list.add(2, new Book(
 //                "The Sundered Grail",
@@ -119,10 +188,8 @@ public class Main {
 
 
                 case 2:
-
                     Book newBook = new Book();
                     System.out.println("Заполните все поля для добавления книги");
-
 
                     System.out.print("title: ");
                     sc.nextLine();
@@ -218,10 +285,8 @@ public class Main {
 
                 case 5:
                     try {
-
                         DocumentBuilder docParser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                        Document document = docParser.parse(Main.FILE_PATH + "book.xml");
-
+                        Document document = docParser.parse(FILE_PATH + "book.xml");
 
                         Library.addNewBookXML(document);
 
@@ -260,6 +325,7 @@ public class Main {
                     } catch (IOException ex) {
                         ex.printStackTrace(System.out);
                     }
+                    break;
 
 
                 case 0:
