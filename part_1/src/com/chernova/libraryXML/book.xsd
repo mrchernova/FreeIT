@@ -26,7 +26,15 @@
 
                             <element name="genre">
                                 <simpleType>
-                                    <restriction base="string"/>
+                                    <restriction base="string">
+                                   <enumeration value="Detective"/>
+                                   <enumeration value="Romance"/>
+                                   <enumeration value="Adventure"/>
+                                   <enumeration value="Fantasy"/>
+                                   <enumeration value="Science"/>
+                                   <enumeration value="History"/>
+                                   <enumeration value="Philosophy"/>
+                                    </restriction>
                                 </simpleType>
                             </element>
 

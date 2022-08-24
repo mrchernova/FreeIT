@@ -1,13 +1,13 @@
 package com.chernova.libraryXML;
 
 public enum Genre {
-    DETECTIVE(1, "detective"),
-    ROMANCE(2, "romance"),
-    ADVENTURE(3, "adventure"),
-    FANTASY(4, "fantasy"),
-    SCIENCE(5, "science"),
-    HISTORY(6, "history"),
-    PHILOSOPHY(7, "philosophy");
+    DETECTIVE(1, "Detective"),
+    ROMANCE(2, "Romance"),
+    ADVENTURE(3, "Adventure"),
+    FANTASY(4, "Fantasy"),
+    SCIENCE(5, "Science"),
+    HISTORY(6, "History"),
+    PHILOSOPHY(7, "Philosophy");
 
     int genreId;
     String value;
