@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <books>
     <book isbn="1-1234-1234-1">
         <title>XML Developer's Guide</title>
@@ -9,9 +9,23 @@
 
     <book isbn="2-1234-1234-2">
         <title>Midnight Rain</title>
-        <text>A former architect battles corporate zombies, an evil sorceress, and her own childhood to become queen of the world</text>
+        <text>A former architect battles corporate zombies...
+        </text>
         <genre>Fantasy</genre>
         <publishDate>2000-12-16</publishDate>
     </book>
 
+    <book isbn="2-1234-1234-2">
+        <title>Midnight Rain</title>
+        <text>A former architect battles corporate zombies...
+        </text>
+        <genre>fantasy</genre>
+        <publishDate>2000-12-16</publishDate>
+    </book>
+    <book isbn="1-1234-1234-1">
+        <title>XML Developer's Guide</title>
+        <text>An in-depth look at creating applications with XML</text>
+        <genre>science</genre>
+        <publishDate>2000-10-01</publishDate>
+    </book>
 </books>

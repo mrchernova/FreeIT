@@ -35,8 +35,8 @@ public class Main {
             "\t3. По добавлению";
 
 
-    //public static String FILE_PATH = "part_1/src/com/chernova/libraryXML/";       // H
-    public static String FILE_PATH = "freeit/part_1/src/com/chernova/libraryXML/";  // W
+    public static String FILE_PATH = "part_1/src/com/chernova/libraryXML/";       // H
+    // public static String FILE_PATH = "freeit/part_1/src/com/chernova/libraryXML/";  // W
 
     public static String tag = "";
     public static Book newBookFromXML;
@@ -73,26 +73,11 @@ public class Main {
             }
         } else {
             System.out.println("Файл book.xml не соответствует схеме");
-            System.out.println("При работе с программой файл .xml не будет учтен");
+            //  System.out.println("При работе с программой файл .xml не будет учтен");  // доделать это
         }
 
 
-        // Книги, которые уже есть в библиотеке
-        Book testBook = new Book();
-        testBook.setTitle("The Sundered Grail");
-        testBook.setText("The two daughters of Maeve, half-sisters, battle one another for control of England. Sequel to, Oberon's Legacy");
-        testBook.setPublishDate("2001-09-10");
-        testBook.setISBN("1-1111-1111-1");
-        testBook.setGenre(Genre.FANTASY);
-        Library.addBook(testBook);
 
-        Book testBook1 = new Book();
-        testBook1.setTitle("Lover Birds");
-        testBook1.setText("When Carla meets Paul at an ornithology conference, tempers fly as feathers get ruffled");
-        testBook1.setPublishDate("2000-09-02");
-        testBook1.setISBN("1-1111-1111-2");
-        testBook1.setGenre(Genre.ROMANCE);
-        Library.addBook(testBook1);
 
 
         // работа с меню
@@ -245,30 +230,32 @@ public class Main {
 
                 case 5:
                     try {
-
+                        // Создается построитель документа
                         DocumentBuilder docParser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                        // Создается дерево DOM документа из файла
                         Document document = docParser.parse(FILE_PATH + "book.xml");
 
-                        Library.addBooksToXML(document);
-                    //    System.out.println(ANSI_GREEN + "Файл записан на диск"+ ANSI_RESET);
-
+                            Library.addBooksToXML(document);
+                            System.out.println(ANSI_GREEN + "Файл записан на диск"+ ANSI_RESET);
+//                        // Получаем корневой элемент
 //                        Node root = document.getDocumentElement();
 //                        System.out.println("doc " + document.getDocumentElement());
-//
 //                        System.out.println("List of books:");
 //                        System.out.println();
 //
+//                        // Просматриваем все подэлементы корневого - т.е. книги
 //                        NodeList books = root.getChildNodes();
 //
 //                        for (int i = 0; i < books.getLength(); i++) {
 //                            Node book = books.item(i);
 //
+//                            // Если нода не текст, то это книга - заходим внутрь
 //                            if (book.getNodeType() != Node.TEXT_NODE) {
 //                                NodeList bookProps = book.getChildNodes();
 //
 //                                for (int j = 0; j < bookProps.getLength(); j++) {
 //                                    Node bookProp = bookProps.item(j);
-//
+//                                    // Если нода не текст, то это один из параметров книги - печатаем
 //                                    if (bookProp.getNodeType() != Node.TEXT_NODE) {
 //                                        System.out.println(bookProp.getNodeName() + ":" + bookProp.getChildNodes().item(0).getTextContent());
 //                                    }

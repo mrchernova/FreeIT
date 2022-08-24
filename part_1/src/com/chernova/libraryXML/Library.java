@@ -134,36 +134,30 @@ public class Library {
     public static void addBooksToXML(Document document) {
 
         for (int i = 0; i < list.size(); i++) {
-            Book newBook = new Book();
-            newBook.setTitle(list.get(i).getTitle());
-            newBook.setText(list.get(i).getText());
-            newBook.setGenre(list.get(i).getGenre());
-            newBook.setPublishDate(list.get(i).getPublishDate());
-            newBook.setISBN(list.get(i).getISBN());
 
             Element book = document.createElement("book");
 
             Element title = document.createElement("title");
-            title.setTextContent(newBook.getTitle());
+            title.setTextContent(list.get(i).getTitle());
 
             Element text = document.createElement("text");
-            text.setTextContent(newBook.getText());
+            text.setTextContent(list.get(i).getText());
 
             Element genre = document.createElement("genre");
-            genre.setTextContent(newBook.getGenre().value);
+            genre.setTextContent(list.get(i).getGenre().value);
 
             Element publishDate = document.createElement("publishDate");
-            publishDate.setTextContent(newBook.getPublishDate());
+            publishDate.setTextContent(list.get(i).getPublishDate());
 
             Element isbn = document.createElement("ISBN");
-            isbn.setTextContent(newBook.getISBN());
+            isbn.setTextContent(list.get(i).getISBN());
 
             // Добавляем внутренние элементы книги в элемент <Book>
             book.appendChild(title);
             book.appendChild(text);
             book.appendChild(genre);
             book.appendChild(publishDate);
-            book.setAttribute("isbn", newBook.getISBN());
+            book.setAttribute("isbn", list.get(i).getISBN());
 
             Node root = document.getDocumentElement();
             // Добавляем книгу в корневой элемент
@@ -179,7 +173,7 @@ public class Library {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer tr = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(document);
-            FileOutputStream fos = new FileOutputStream(Main.FILE_PATH + "listOfBooks.xml");
+            FileOutputStream fos = new FileOutputStream(Main.FILE_PATH + "book.xml");
             StreamResult result = new StreamResult(fos);
             tr.transform(source, result);
         } catch (TransformerException | IOException e) {
