@@ -6,15 +6,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -24,8 +18,8 @@ public class Main {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_GREEN = "\u001B[32m";
 
-    public static int id = 0;
     static Scanner sc = new Scanner(System.in);
 
     public static final String MAIN_MENU = "\n1. Получить список книг\n" +
@@ -44,101 +38,64 @@ public class Main {
     //public static String FILE_PATH = "part_1/src/com/chernova/libraryXML/";       // H
     public static String FILE_PATH = "freeit/part_1/src/com/chernova/libraryXML/";  // W
 
-    private static void printInfoAboutAllChildNodes(NodeList nlist) {
-        Book bookFromXML = new Book();
-        for (int i = 0; i < nlist.getLength(); i++) {
-            Node node = nlist.item(i);
+    public static String tag = "";
+    public static Book newBookFromXML;
 
-
-            // У элементов есть два вида узлов - другие элементы или текстовая информация. Потому нужно разбираться две ситуации отдельно.
-            if (node.getNodeType() == Node.TEXT_NODE) {
-                // Фильтрация информации, так как пробелы и переносы строчек нам не нужны. Это не информация.
-                String textInformation = node.getNodeValue().replace("\n", "").trim();
-
-                if (!textInformation.isEmpty())
-                    System.out.println(node.getNodeValue());
-
-            }
-            // Если это не текст, а элемент, то обрабатываем его как элемент.
-            else {
-                System.out.println("<"+node.getNodeName()+">");
-
-                // Получение атрибутов
-                NamedNodeMap attributes = node.getAttributes();
-
-                // Вывод информации про все атрибуты
-                for (int k = 0; k < attributes.getLength(); k++) {
-                    System.out.println("Имя атрибута: " + attributes.item(k).getNodeName() + ": " + attributes.item(k).getNodeValue());
-                bookFromXML.setISBN(attributes.item(k).getNodeValue());
-                    System.out.println("---"+bookFromXML.getISBN());
-                }
-
-            }
-
-
-
-            // Если у данного элемента еще остались узлы, то вывести всю информацию про все его узлы.
-            if (node.hasChildNodes()) {
-                printInfoAboutAllChildNodes(node.getChildNodes());
-            }
-        }
-    }
 
     public static void main(String[] args) {
 
+        // проверка xml на валидность. Если успешно, то с помощью метода printInfoAboutAllChildNodes() добавляет книги из xml в библиотеку
         boolean answer = ValidatorXSD.validateXMLSchema(FILE_PATH + "book.xsd", FILE_PATH + "book.xml");
         if (answer) {
             System.out.println("Файл book.xml соответствует схеме");
+            try {
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document document = builder.parse(FILE_PATH + "book.xml");
+
+                String element = "books";
+                NodeList matchedElementsList = document.getElementsByTagName(element);
+                if (matchedElementsList.getLength() == 0) {
+                    System.out.println("<" + element + "> не был найден в файле.");
+
+                } else {
+                    Node foundedElement = matchedElementsList.item(0);
+                    if (foundedElement.hasChildNodes()) {
+                        printInfoAboutAllChildNodes(foundedElement.getChildNodes());
+                    }
+                }
+            } catch (ParserConfigurationException ex) {
+                ex.printStackTrace(System.out);
+            } catch (SAXException ex) {
+                ex.printStackTrace(System.out);
+            } catch (IOException ex) {
+                ex.printStackTrace(System.out);
+            }
         } else {
             System.out.println("Файл book.xml не соответствует схеме");
+            System.out.println("При работе с программой файл .xml не будет учтен");
         }
 
-// попробовать добавить в list книги из xml                     !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(FILE_PATH + "book.xml");
 
-            String element = "books";
-            NodeList matchedElementsList = document.getElementsByTagName(element);
-            if (matchedElementsList.getLength() == 0) {
-                System.out.println("<" + element + "> не был найден в файле.");
+        // Книги, которые уже есть в библиотеке
+        Book testBook = new Book();
+        testBook.setTitle("The Sundered Grail");
+        testBook.setText("The two daughters of Maeve, half-sisters, battle one another for control of England. Sequel to, Oberon's Legacy");
+        testBook.setPublishDate("2001-09-10");
+        testBook.setISBN("1-1111-1111-1");
+        testBook.setGenre(Genre.FANTASY);
+        Library.addBook(testBook);
 
-            } else {
-                // Получение первого элемента.
-                Node foundedElement = matchedElementsList.item(0);
-
-                // Если есть данные внутри, вызов метода для вывода всей информации
-                if (foundedElement.hasChildNodes())
-                    printInfoAboutAllChildNodes(foundedElement.getChildNodes());
-            }
-
-        } catch (ParserConfigurationException ex) {
-            ex.printStackTrace(System.out);
-        } catch (SAXException ex) {
-            ex.printStackTrace(System.out);
-        } catch (IOException ex) {
-            ex.printStackTrace(System.out);
-        }
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//        Library.list.add(2, new Book(
-//                "The Sundered Grail",
-//                "The two daughters of Maeve, half-sisters, battle one another for control of England. Sequel to, Oberon's Legacy",
-//                "2001-09-10",
-//                "1-1111-1111-1",
-//                Genre.FANTASY,
-//                new Date()));
-//
-//        Library.list.add(3, new Book(
-//                "Lover Birds",
-//                "When Carla meets Paul at an ornithology conference, tempers fly as feathers get ruffled",
-//                "2000-09-02",
-//                "1-1111-1111-2",
-//                Genre.ROMANCE,
-//                new Date()));
+        Book testBook1 = new Book();
+        testBook1.setTitle("Lover Birds");
+        testBook1.setText("When Carla meets Paul at an ornithology conference, tempers fly as feathers get ruffled");
+        testBook1.setPublishDate("2000-09-02");
+        testBook1.setISBN("1-1111-1111-2");
+        testBook1.setGenre(Genre.ROMANCE);
+        Library.addBook(testBook1);
 
 
+        // работа с меню
         int option = -1;
         while (option != 0) {
             System.out.println(ANSI_YELLOW + MAIN_MENU + ANSI_RESET);
@@ -148,6 +105,7 @@ public class Main {
                 System.out.println("Введите число");
                 sc.next();
             }
+
             switch (option) {
 
                 case 1:
@@ -218,32 +176,35 @@ public class Main {
                         }
                     }
 
-
                     System.out.print("Введите 10-ый код isbn в формате: х-хххх-хххх-х ");
                     sc.nextLine();
-                    String inputISBN = "";
+                    String inputISBN = sc.nextLine();
                     boolean check = false;
                     while (!check) {
-                        inputISBN = sc.nextLine();
                         if (inputISBN.matches("[0-9]-[0-9]{4}-[0-9]{4}-[0-9]")) {
                             check = true;
+                        } else {
+                            System.out.println("Введенный isbn не соответствует формату. Попробуйте еще раз ");
+                            inputISBN = sc.nextLine();
                         }
                     }
                     newBook.setISBN(inputISBN);
 
-
                     System.out.print("Введите дату публикации в формате: yyyy-MM-dd ");
-                    String publishDate = "";
+                    String publishDate = sc.nextLine();
                     check = false;
                     while (!check) {
-                        publishDate = sc.nextLine();
                         if (publishDate.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")) {
                             check = true;
+                        } else {
+                            System.out.println("Введенная дата не соответствует формату. Попробуйте еще раз ");
+                            publishDate = sc.nextLine();
                         }
                     }
                     newBook.setPublishDate(publishDate);
 
                     Library.addBook(newBook);
+                    System.out.println(ANSI_GREEN + "Книга успешно добавлена" + ANSI_RESET);
                     break;
 
 
@@ -262,7 +223,6 @@ public class Main {
                         if (!existBook) {
                             System.out.println(ANSI_RED + "Такой книги нет в списке" + ANSI_RESET);
                         }
-
                     } catch (InputMismatchException e) {
                         System.out.println(ANSI_RED + "Книга не найдена" + ANSI_RESET);
                         sc.next();
@@ -285,38 +245,37 @@ public class Main {
 
                 case 5:
                     try {
+
                         DocumentBuilder docParser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
                         Document document = docParser.parse(FILE_PATH + "book.xml");
 
-                        Library.addNewBookXML(document);
+                        Library.addBooksToXML(document);
+                    //    System.out.println(ANSI_GREEN + "Файл записан на диск"+ ANSI_RESET);
 
-                        Node root = document.getDocumentElement();
-                        System.out.println("doc " + document.getDocumentElement());
-
-                        System.out.println("List of books:");
-                        System.out.println();
-
-                        NodeList books = root.getChildNodes();
-
-                        for (int i = 0; i < books.getLength(); i++) {
-                            Node book = books.item(i);
-
-
-                            if (book.getNodeType() != Node.TEXT_NODE) {
-
-                                NodeList bookProps = book.getChildNodes();
-                                for (int j = 0; j < bookProps.getLength(); j++) {
-
-                                    Node bookProp = bookProps.item(j);
-
-                                    if (bookProp.getNodeType() != Node.TEXT_NODE) {
-
-                                        System.out.println(bookProp.getNodeName() + ":" + bookProp.getChildNodes().item(0).getTextContent());
-                                    }
-                                }
-                                System.out.println("\n");
-                            }
-                        }
+//                        Node root = document.getDocumentElement();
+//                        System.out.println("doc " + document.getDocumentElement());
+//
+//                        System.out.println("List of books:");
+//                        System.out.println();
+//
+//                        NodeList books = root.getChildNodes();
+//
+//                        for (int i = 0; i < books.getLength(); i++) {
+//                            Node book = books.item(i);
+//
+//                            if (book.getNodeType() != Node.TEXT_NODE) {
+//                                NodeList bookProps = book.getChildNodes();
+//
+//                                for (int j = 0; j < bookProps.getLength(); j++) {
+//                                    Node bookProp = bookProps.item(j);
+//
+//                                    if (bookProp.getNodeType() != Node.TEXT_NODE) {
+//                                        System.out.println(bookProp.getNodeName() + ":" + bookProp.getChildNodes().item(0).getTextContent());
+//                                    }
+//                                }
+//                                System.out.println("\n");
+//                            }
+//                        }
 
                     } catch (ParserConfigurationException ex) {
                         ex.printStackTrace(System.out);
@@ -335,8 +294,6 @@ public class Main {
                 default:
                     System.out.println("Выберите номер из списка");
                     break;
-
-
             }
         }
 
@@ -344,4 +301,53 @@ public class Main {
     }
 
 
+    //добавляет информацию из xml в список с книгами
+    private static void printInfoAboutAllChildNodes(NodeList nlist) {
+        for (int i = 0; i < nlist.getLength(); i++) {
+            Node node = nlist.item(i);
+
+            if (node.getNodeType() == Node.TEXT_NODE) {   // У элементов есть два вида узлов - другие элементы или текстовая информация
+                String textInformation = node.getNodeValue().replace("\n", "").trim();// Фильтрация информации, так как пробелы и переносы строчек нам не нужны. Это не информация.
+                if (!textInformation.isEmpty()) {
+                    //       System.out.println(node.getNodeValue()); // это содержание
+                    switch (tag) {
+                        case "title":
+                            newBookFromXML.setTitle(node.getNodeValue());
+                            break;
+                        case "text":
+                            newBookFromXML.setText(node.getNodeValue());
+                            break;
+                        case "genre":
+                            newBookFromXML.setGenre(Genre.valueOf(node.getNodeValue().toUpperCase()));
+                            break;
+                        case "publishDate":
+                            newBookFromXML.setPublishDate(node.getNodeValue());
+                            Library.addBook(newBookFromXML);
+                            break;
+                        case "isbn":
+                            newBookFromXML.setISBN(node.getNodeValue());
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            } else {// Если это не текст, а элемент, то обрабатываем его как элемент.
+                //     System.out.println("<" + node.getNodeName() + ">"); // это тег
+                tag = node.getNodeName();
+                NamedNodeMap attributes = node.getAttributes();// Получение атрибутов
+
+                for (int k = 0; k < attributes.getLength(); k++) {// Вывод информации про все атрибуты
+                    //   System.out.println("Имя атрибута: " + attributes.item(k).getNodeName() + ": " + attributes.item(k).getNodeValue());
+                    newBookFromXML = new Book();
+                    newBookFromXML.setISBN(attributes.item(k).getNodeValue());
+                }
+            }
+            // Если у данного элемента еще остались узлы, то вывести всю информацию про все его узлы.
+            if (node.hasChildNodes()) {
+                printInfoAboutAllChildNodes(node.getChildNodes());
+            }
+        }
+    }
+
 }
+

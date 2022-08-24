@@ -74,16 +74,6 @@ public class Book implements Comparable<Book>, Comparator<Book> {
 
     }
 
-    public Book(int id,String title, String text, String publishDate, String isbn, Genre genre, Date localDate) {
-    this.id = id;
-        this.title = title;
-        this.text = text;
-        this.genre = genre;
-        this.publishDate = publishDate;
-        this.isbn = isbn;
-        this.localDate = localDate;
-    }
-
     public Book(String title, String text, String publishDate, String isbn, Genre genre, Date localDate) {
         this.title = title;
         this.text = text;

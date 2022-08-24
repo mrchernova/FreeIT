@@ -1,8 +1,6 @@
 package com.chernova.libraryXML;
 
-
 public enum Genre {
-
     DETECTIVE(1, "detective"),
     ROMANCE(2, "romance"),
     ADVENTURE(3, "adventure"),
@@ -18,18 +16,6 @@ public enum Genre {
         this.genreId = genreId;
         this.value = value;
     }
-
-//    public static String getGenreByID(int genreId) {
-//
-//        for (Genre g : Genre.values()) {
-//            if (g.genreId == genreId) {
-//                return g.value;
-//            }
-//        }
-//        return "UNKNOWN";
-//
-//    }
-
 
     public static void printGenre() {
         for (Genre g : Genre.values()) {

@@ -17,13 +17,7 @@ import java.util.*;
 public class Library {
 
     public static LinkedList<Book> list = new LinkedList<>();
-
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_RESET = "\u001B[0m";
-
-
+    public static int id = 0;
     //получить все книги (метод ВОЗВРАЩАЕТ список всех книг в библиотеке)
     public static LinkedList<Book> getAllBooks() {
         return list;
@@ -32,10 +26,10 @@ public class Library {
 
     //  добавить книгу (принимает объект книги и добавляет его в список товаров)
     public static void addBook(Book book) {
-        book.setId(Main.id++);
+        book.setId(++id);
         book.setLocalDate(new Date());
         list.add(book);
-        System.out.println(ANSI_GREEN + "Книга успешно добавлена" + ANSI_RESET);
+
     }
 
 
@@ -60,9 +54,9 @@ public class Library {
         }
 
         System.out.println("Изменить жанр книги: ");
-        System.out.println(ANSI_YELLOW);
+        System.out.println(Main.ANSI_YELLOW);
         Genre.printGenre();
-        System.out.println(ANSI_RESET);
+        System.out.println(Main.ANSI_RESET);
         boolean readyToSet = false;
         while (!readyToSet) {
             try {
@@ -106,7 +100,7 @@ public class Library {
             while (!check) {
                 if (publishDate.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")) {
                     check = true;
-                }else {
+                } else {
                     System.out.println("Введенная дата не соответствует формату. Попробуйте еще раз ");
                     publishDate = Main.sc.nextLine();
                 }
@@ -114,9 +108,8 @@ public class Library {
         }
         book.setPublishDate(publishDate);
 
-
         book.setLocalDate(new Date()); //дата изменения книги
-        System.out.println(ANSI_GREEN + "Данные изменены" + ANSI_RESET);
+        System.out.println(Main.ANSI_GREEN + "Данные изменены" + Main.ANSI_RESET);
     }
 
 
@@ -131,14 +124,15 @@ public class Library {
             }
         }
         if (isDelete) {
-            System.out.println(ANSI_GREEN + "Книга успешно удалена" + ANSI_RESET);
+            System.out.println(Main.ANSI_GREEN + "Книга успешно удалена" + Main.ANSI_RESET);
         } else {
-            System.out.println(ANSI_RED + "Книги с таким id нет в списке" + ANSI_RESET);
+            System.out.println(Main.ANSI_RED + "Книги с таким id нет в списке" + Main.ANSI_RESET);
         }
     }
 
 
-    public static void addNewBookXML(Document document) {
+    public static void addBooksToXML(Document document) {
+
         for (int i = 0; i < list.size(); i++) {
             Book newBook = new Book();
             newBook.setTitle(list.get(i).getTitle());
@@ -161,12 +155,8 @@ public class Library {
             Element publishDate = document.createElement("publishDate");
             publishDate.setTextContent(newBook.getPublishDate());
 
-
             Element isbn = document.createElement("ISBN");
             isbn.setTextContent(newBook.getISBN());
-
-
-            //Если передавать объект, то можно вызвать addBook                  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
             // Добавляем внутренние элементы книги в элемент <Book>
             book.appendChild(title);
@@ -182,7 +172,6 @@ public class Library {
             // Записываем XML в файл
             writeDocument(document);
         }
-
     }
 
     private static void writeDocument(Document document) throws TransformerFactoryConfigurationError {
