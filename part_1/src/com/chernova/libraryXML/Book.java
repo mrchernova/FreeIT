@@ -86,11 +86,11 @@ public class Book implements Comparable<Book>, Comparator<Book> {
     @Override
     public String toString() {
         return "\nid " + id +
-                "| title=" + title +
-                "| text=" + text +
-                "| genre=" + genre +
-                "| isbn=" + isbn +
-                "| publishDate=" + publishDate;
+                "| title: " + title +
+                "| text: " + text +
+                "| genre: " + genre +
+                "| isbn: " + isbn +
+                "| publishDate: " + publishDate;
     }
 
     @Override
