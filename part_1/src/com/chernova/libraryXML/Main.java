@@ -35,8 +35,8 @@ public class Main {
             "\t3. По добавлению";
 
 
-    public static String FILE_PATH = "part_1/src/com/chernova/libraryXML/";       // H
-    // public static String FILE_PATH = "freeit/part_1/src/com/chernova/libraryXML/";  // W
+   // public static String FILE_PATH = "part_1/src/com/chernova/libraryXML/";       // H
+     public static String FILE_PATH = "freeit/part_1/src/com/chernova/libraryXML/";  // W
 
     public static String tag = "";
     public static Book newBookFromXML;
@@ -235,7 +235,7 @@ public class Main {
                         // Создается дерево DOM документа из файла
                         Document document = docParser.parse(FILE_PATH + "book.xml");
 
-                            Library.addBooksToXML(document);
+                            Library.addBooksToXML();
                             System.out.println(ANSI_GREEN + "Файл записан на диск"+ ANSI_RESET);
 //                        // Получаем корневой элемент
 //                        Node root = document.getDocumentElement();
@@ -335,6 +335,9 @@ public class Main {
             }
         }
     }
+
+
+
 
 }
 

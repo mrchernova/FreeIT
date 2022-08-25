@@ -4,6 +4,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -131,9 +133,28 @@ public class Library {
     }
 
 
-    public static void addBooksToXML(Document document) {
+    //v1 public static void addBooksToXML(Document document) {
+    public static void addBooksToXML() {
 
-        for (int i = 0; i < list.size(); i++) {
+       // *****************************************************************************************************************
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        try {
+            builder = factory.newDocumentBuilder();
+
+            // создаем пустой объект Document, в котором будем создавать наш xml-файл
+            Document document = builder.newDocument();
+
+
+            // создаем корневой элемент
+            Element root = document.createElement("books");
+            // добавляем корневой элемент в объект Document
+            document.appendChild(root);
+
+
+
+
+            for (int i = 0; i < list.size(); i++) {
 
             Element book = document.createElement("book");
 
@@ -159,13 +180,58 @@ public class Library {
             book.appendChild(publishDate);
             book.setAttribute("isbn", list.get(i).getISBN());
 
-            Node root = document.getDocumentElement();
-            // Добавляем книгу в корневой элемент
+//            Node root = document.getDocumentElement();
+//            // Добавляем книгу в корневой элемент
             root.appendChild(book);
 
             // Записываем XML в файл
             writeDocument(document);
         }
+
+
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+       // *****************************************************************************************************************
+
+//        for (int i = 0; i < list.size(); i++) {
+//
+//            Element book = document.createElement("book");
+//
+//            Element title = document.createElement("title");
+//            title.setTextContent(list.get(i).getTitle());
+//
+//            Element text = document.createElement("text");
+//            text.setTextContent(list.get(i).getText());
+//
+//            Element genre = document.createElement("genre");
+//            genre.setTextContent(list.get(i).getGenre().value);
+//
+//            Element publishDate = document.createElement("publishDate");
+//            publishDate.setTextContent(list.get(i).getPublishDate());
+//
+//            Element isbn = document.createElement("ISBN");
+//            isbn.setTextContent(list.get(i).getISBN());
+//
+//            // Добавляем внутренние элементы книги в элемент <Book>
+//            book.appendChild(title);
+//            book.appendChild(text);
+//            book.appendChild(genre);
+//            book.appendChild(publishDate);
+//            book.setAttribute("isbn", list.get(i).getISBN());
+//
+//            Node root = document.getDocumentElement();
+//            // Добавляем книгу в корневой элемент
+//            root.appendChild(book);
+//
+//            // Записываем XML в файл
+//            writeDocument(document);
+//        }
+
     }
 
     private static void writeDocument(Document document) throws TransformerFactoryConfigurationError {
