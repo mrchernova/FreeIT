@@ -3,7 +3,11 @@ package com.chernova.libraryXML;
 import java.util.Comparator;
 import java.util.Date;
 
+
 public class Book implements Comparable<Book>, Comparator<Book> {
+
+    private static int counter = 0;
+
     private int id;
     private String title;
     private String text;
@@ -15,10 +19,6 @@ public class Book implements Comparable<Book>, Comparator<Book> {
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getTitle() {
@@ -71,10 +71,12 @@ public class Book implements Comparable<Book>, Comparator<Book> {
     }
 
     public Book() {
+        this.id = ++counter;
 
     }
 
     public Book(String title, String text, String publishDate, String isbn, Genre genre, Date localDate) {
+       this.id = ++counter;
         this.title = title;
         this.text = text;
         this.genre = genre;
@@ -85,12 +87,14 @@ public class Book implements Comparable<Book>, Comparator<Book> {
 
     @Override
     public String toString() {
-        return "\nid " + id +
-                "| title: " + title +
-                "| text: " + text +
-                "| genre: " + genre +
-                "| isbn: " + isbn +
-                "| publishDate: " + publishDate;
+//        return "\nid " + id +
+//                "| title: " + title +
+//                "| text: " + text +
+//                "| genre: " + genre +
+//                "| isbn: " + isbn +
+//                "| publishDate: " + publishDate;
+        String out = String.format("\nid %-3s title: %-30s text: %-55s genre: %-11s ISBN: %-15s publishDate: %-10s", id,title, text, genre, isbn, publishDate);
+        return out;
     }
 
     @Override

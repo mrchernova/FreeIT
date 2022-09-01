@@ -28,7 +28,6 @@ public class Library {
 
     //  добавить книгу (принимает объект книги и добавляет его в список товаров)
     public static void addBook(Book book) {
-        book.setId(++id);
         book.setLocalDate(new Date());
         list.add(book);
     }
